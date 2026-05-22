@@ -16,6 +16,7 @@ body{
     width: 100px;
     outline: 1px solid white;
     border-radius: 10px;
+    position: relative;
 }
 .top-row{
     margin-bottom: 50px;
@@ -36,18 +37,23 @@ body{
     background-position: center;
 }
 .club{
-    background-image: url(./images/club.png);
+    /* background-image: url(/images/club.png); */
 }
 .spade{
-    background-image: url(./images/spade.png);
+    /* background-image: url(/images/spade.png); */
 }
 .heart{
-    background-image: url(./images/heart.png);
+    /* background-image: url(/images/heart.png); */
 }
 .diamond{
-    background-image: url(./images/diamond.png);
+    /* background-image: url(/images/diamond.png); */
 }
 .deck-close{
-    background-image: url('./images/card_back.png');
+    /* background-image: url('images/card_back.png'); */
     background-size: 100px 150px;
+}
+.cardImg{
+    height: 100%;
+    width: 100%;
+    position: absolute;
 }

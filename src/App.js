@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import generatepack from './generatepack'
-
+import closedCard from './images/card_back.png';
 import './App.css'
 const App = () => {
   let deck_closed = useRef(undefined);
@@ -11,6 +11,7 @@ const App = () => {
   let diamond = useRef(undefined);
   let columns = useRef(undefined);
 
+  let pack = generatepack();
 
   let [deck_closedArr,setDeck_closedArr] = useState([]);
   let [open_closedArr,setOpen_closedArr] = useState([]);
@@ -21,8 +22,20 @@ const App = () => {
   let [columnsArr,setColumnsArr] = useState([[],[],[],[],[],[],[]]);
 
   useEffect(()=>{
-    // distributes cards
-  });
+    
+    columnsArr.map((columnArr,index)=>{
+      for(let i=0;i<=index;i++){
+        let card = pack.pop();
+        if(i==index){
+          card.face = true;
+        }
+        columnArr.push(card);
+      }
+    })
+    setDeck_closedArr(pack);
+  },[]);
+
+  
   return <>
     <div className='board'>
       <div className='top-row'>
@@ -44,7 +57,12 @@ const App = () => {
         <div className='card col col4'></div>
         <div className='card col col5'></div>
         <div className='card col col6'></div>
-        <div className='card col col7'></div>
+        <div className='card col col7'>
+          {columnsArr[6].map((card,index)=>{
+            console.log(card.path);
+            return <img src={card.face?card.path:closedCard} className='cardImg' style={{top:index*20+"px"}}/>
+          })}
+        </div>
       </div>
     </div>
   </>;

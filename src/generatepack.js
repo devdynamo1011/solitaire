@@ -10,7 +10,7 @@ let generatepack = () => {
                 type:type,
                 value:value,
                 face:false,
-                path:`images/${type}_${value}.png`,
+                path:`/images/${type}_${value}.png`,
             }
             pack.push(cardObj);
         })
