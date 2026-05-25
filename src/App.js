@@ -20,6 +20,25 @@ const App = () => {
   let [spadeArr,setSpadeArr] = useState([]);
   let [diamondArr,setDiamondArr] = useState([]);
   let [columnsArr,setColumnsArr] = useState([[],[],[],[],[],[],[]]);
+  
+  let [chooseCard,setChooseCard] = useState(null);
+
+  let chooseFromDeck = () => {
+    if(deck_closedArr.length>0){
+      let card = deck_closedArr.pop();
+      setOpen_closedArr([...open_closedArr,card]);
+    }else{
+      setDeck_closedArr(open_closedArr.reverse());
+      setOpen_closedArr([]);
+    }
+  }
+
+  let selectCard = (card) => {
+    if(card.face){
+      console.log(card);
+      
+    }
+  }
 
   useEffect(()=>{
     
@@ -32,7 +51,8 @@ const App = () => {
         columnArr.push(card);
       }
     })
-    setDeck_closedArr(pack);
+    let newpack = pack.map(card => ({...card,face: true}));
+    setDeck_closedArr(newpack);
   },[]);
 
   
@@ -40,8 +60,21 @@ const App = () => {
     <div className='board'>
       <div className='top-row'>
         <div className='left'>
-          <div className='card deck-close' ref={deck_closed}></div>
-          <div className='card deck-open' ref={open_closed}></div>
+          <div className='card deck-close' ref={deck_closed} onClick={chooseFromDeck}>
+            {
+              deck_closedArr.length>0?
+              <img src='/images/card_back.png' style={{height:'100%',width:'100%'}}/>
+              :""
+            }
+            
+          </div>
+          <div className='card deck-open' ref={open_closed}>
+            {
+              open_closedArr.length>0?
+              <img src={open_closedArr[open_closedArr.length-1].path} style={{height:'100%',width:'100%'}} onClick={()=>{selectCard(open_closedArr[open_closedArr.length-1])}}/>
+              :""
+            }
+          </div>
         </div>
         <div className='right'>
           <div className='card club' ref={club}></div>
@@ -51,18 +84,14 @@ const App = () => {
         </div>
       </div>
       <div className='bottom-row' ref={columns}>
-        <div className='card col col1'></div>
-        <div className='card col col2'></div>
-        <div className='card col col3'></div>
-        <div className='card col col4'></div>
-        <div className='card col col5'></div>
-        <div className='card col col6'></div>
-        <div className='card col col7'>
-          {columnsArr[6].map((card,index)=>{
-            console.log(card.path);
-            return <img src={card.face?card.path:closedCard} className='cardImg' style={{top:index*20+"px"}}/>
-          })}
-        </div>
+        {columnsArr.map(function(column,index){
+          let colcls = 'card col col'+(index+1);
+          return <div key={index} className={colcls}>
+            {column.map(function(card,index){
+              return <img key={index} src={card.face?card.path:closedCard} className='cardImg' style={{top:index*20+"px"}} onClick={()=>{selectCard(card)}}/>
+            })}
+          </div>;
+        })}
       </div>
     </div>
   </>;
