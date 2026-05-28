@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import generatepack from './generatepack'
 import closedCard from './images/card_back.png';
 import './App.css'
+import validdropcard from './validdropcard';
 const App = () => {
   let deck_closed = useRef(undefined);
   let open_closed = useRef(undefined);
@@ -10,7 +11,6 @@ const App = () => {
   let spade = useRef(undefined);
   let diamond = useRef(undefined);
   let columns = useRef(undefined);
-
   let pack = generatepack();
 
   let [deck_closedArr,setDeck_closedArr] = useState([]);
@@ -22,6 +22,7 @@ const App = () => {
   let [columnsArr,setColumnsArr] = useState([[],[],[],[],[],[],[]]);
   
   let [chooseCard,setChooseCard] = useState(null);
+  let [dropCard,setDropCard] = useState(null);
 
   let chooseFromDeck = () => {
     if(deck_closedArr.length>0){
@@ -33,10 +34,15 @@ const App = () => {
     }
   }
 
-  let selectCard = (card) => {
-    if(card.face){
-      console.log(card);
-      
+  let moveCard = (card) => {
+    if (!card.face) return;
+    if (chooseCard === null) {
+        setChooseCard(card);
+    } else {
+        setDropCard(card);
+        console.log(validdropcard(chooseCard, card));
+        setChooseCard(null);
+        setDropCard(null);
     }
   }
 
@@ -71,7 +77,7 @@ const App = () => {
           <div className='card deck-open' ref={open_closed}>
             {
               open_closedArr.length>0?
-              <img src={open_closedArr[open_closedArr.length-1].path} style={{height:'100%',width:'100%'}} onClick={()=>{selectCard(open_closedArr[open_closedArr.length-1])}}/>
+              <img src={open_closedArr[open_closedArr.length-1].path} style={{height:'100%',width:'100%'}} onClick={()=>{moveCard(open_closedArr[open_closedArr.length-1])}}/>
               :""
             }
           </div>
@@ -88,7 +94,7 @@ const App = () => {
           let colcls = 'card col col'+(index+1);
           return <div key={index} className={colcls}>
             {column.map(function(card,index){
-              return <img key={index} src={card.face?card.path:closedCard} className='cardImg' style={{top:index*20+"px"}} onClick={()=>{selectCard(card)}}/>
+              return <img key={index} src={card.face?card.path:closedCard} className='cardImg' style={{top:index*20+"px"}} onClick={()=>{moveCard(card)}}/>
             })}
           </div>;
         })}
