@@ -23,7 +23,7 @@ const App = () => {
   
   let [chooseCard,setChooseCard] = useState(null);
   let [dropCard,setDropCard] = useState(null);
-
+  
   let chooseFromDeck = () => {
     if(deck_closedArr.length>0){
       let card = deck_closedArr.pop();
@@ -40,7 +40,28 @@ const App = () => {
         setChooseCard(card);
     } else {
         setDropCard(card);
-        console.log(validdropcard(chooseCard, card));
+        if(validdropcard(chooseCard, card)){
+
+            let cr,cc,dr,dc;
+            columnsArr.forEach(function(column,colIndex){
+                column.forEach(function(_card,cardIndex){
+                  if(chooseCard.id == _card.id){
+                    cr = cardIndex;
+                    cc = colIndex;
+                  }else if(card.id == _card.id){
+                    dr = cardIndex;
+                    dc = colIndex;
+                  }
+                });
+            });
+            let cardSlice = columnsArr[cc].splice(cr,1);
+            columnsArr[cc][columnsArr[cc].length-1].face = true;
+            columnsArr[dc].push(...cardSlice);
+
+
+            // console.log(columnsArr[cc]);
+            // console.log(columnsArr[dc]);
+        }
         setChooseCard(null);
         setDropCard(null);
     }
